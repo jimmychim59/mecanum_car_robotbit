@@ -78,7 +78,13 @@ radio.onReceivedValue(function (name, value) {
         -1 * value
         )
         carMode(1)
+    } else if (name == "f1") {
+        robotbit.MotorRun(robotbit.Motors.M1A, 255)
+        robotbit.MotorRun(robotbit.Motors.M1B, 255)
+        robotbit.MotorRun(robotbit.Motors.M2A, 255)
+        robotbit.MotorRun(robotbit.Motors.M2B, 255)
     } else {
+        robotbit.MotorStopAll()
         carMode(-1)
     }
 })
