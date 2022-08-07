@@ -1,3 +1,7 @@
+input.onButtonPressed(Button.A, function () {
+    robotbit.MotorRun(robotbit.Motors.M1A, 255)
+    robotbit.MotorRun(robotbit.Motors.M1B, 255)
+})
 // p15 Red Button = Stop (moveFlag = -1)
 // p13 Green Button = Go (moveFlag = 1) w1,w2
 // p14 Yellow Button = Turn (moveFlag = 2) rw1,rw2
@@ -28,7 +32,16 @@ function carMode (moveFlag: number) {
         basic.showIcon(IconNames.No)
         rgb.showColor(neopixel.colors(NeoPixelColors.Red))
     }
+    basic.pause(100)
 }
+input.onButtonPressed(Button.B, function () {
+    robotbit.MotorRunDual(
+    robotbit.Motors.M2A,
+    -255,
+    robotbit.Motors.M2B,
+    -255
+    )
+})
 radio.onReceivedValue(function (name, value) {
     if (name == "rw1") {
         robotbit.MotorRunDual(
@@ -37,7 +50,6 @@ radio.onReceivedValue(function (name, value) {
         robotbit.Motors.M1B,
         value
         )
-        carMode(2)
     } else if (name == "rw2") {
         robotbit.MotorRunDual(
         robotbit.Motors.M2A,
@@ -45,7 +57,6 @@ radio.onReceivedValue(function (name, value) {
         robotbit.Motors.M2B,
         value
         )
-        carMode(2)
     } else if (name == "a1") {
         robotbit.MotorRunDual(
         robotbit.Motors.M1B,
@@ -53,7 +64,6 @@ radio.onReceivedValue(function (name, value) {
         robotbit.Motors.M2A,
         value
         )
-        carMode(3)
     } else if (name == "a2") {
         robotbit.MotorRunDual(
         robotbit.Motors.M1A,
@@ -61,39 +71,35 @@ radio.onReceivedValue(function (name, value) {
         robotbit.Motors.M2B,
         value
         )
-        carMode(3)
     } else if (name == "w1") {
         robotbit.MotorRunDual(
         robotbit.Motors.M1A,
-        -1 * value,
+        value,
         robotbit.Motors.M2A,
-        value
+        -1 * value
         )
-        carMode(1)
     } else if (name == "w2") {
         robotbit.MotorRunDual(
         robotbit.Motors.M1B,
-        value,
+        -1 * value,
         robotbit.Motors.M2B,
-        -1 * value
+        value
         )
-        carMode(1)
-    } else if (name == "f1") {
-        robotbit.MotorRun(robotbit.Motors.M1A, 255)
-        robotbit.MotorRun(robotbit.Motors.M1B, 255)
-        robotbit.MotorRun(robotbit.Motors.M2A, 255)
-        robotbit.MotorRun(robotbit.Motors.M2B, 255)
+    } else if (name == "mode") {
+        carMode(value)
     } else {
         robotbit.MotorStopAll()
         carMode(-1)
     }
 })
+input.onLogoEvent(TouchButtonEvent.Pressed, function () {
+    robotbit.MotorStopAll()
+})
 let rgb: neopixel.Strip = null
 let radio_gp = 39
 radio.setGroup(radio_gp)
 basic.showIcon(IconNames.Happy)
-music.setBuiltInSpeakerEnabled(true)
-music.playSoundEffect(music.builtinSoundEffect(soundExpression.spring), SoundExpressionPlayMode.UntilDone)
 rgb = robotbit.rgb()
 rgb.setBrightness(10)
 rgb.showColor(neopixel.colors(NeoPixelColors.Red))
+music.setBuiltInSpeakerEnabled(false)
